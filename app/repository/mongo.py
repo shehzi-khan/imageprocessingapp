@@ -14,9 +14,9 @@ class MongoRepository():
 
  def find_all(self,limit=None,sort=-1):
    if limit is not None:
-       return self.db[self.COLLECTION_NAME].find().limit(limit).sort("_id", sort)
+       return self.db[self.COLLECTION_NAME].find({},{"image_bytestream":0}).limit(limit).sort("_id", sort)
    else:
-       return self.db[self.COLLECTION_NAME].find().sort("_id",sort)
+       return self.db[self.COLLECTION_NAME].find({},{"image_bytestream":0}).sort("_id",sort)
 
  def find(self, selector):
    return self.db[self.COLLECTION_NAME].find_one(selector)

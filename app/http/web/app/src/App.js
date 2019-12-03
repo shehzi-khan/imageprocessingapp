@@ -33,7 +33,7 @@ class App extends Component {
             number_of_images:null,
             active_ann_list:[],
             // host:'http://178.128.213.249:5000',
-            host:'http://0.0.0.0:5000',
+            host:'http://223.195.37.85:5000',
           };
 
         this.data = [{cat_id:1,category:"student",superb:"person"}]
@@ -62,7 +62,7 @@ class App extends Component {
 
   }
   load_annotations(file_name){
-        axios.get(this.state.host+`/image/annotations?file_name=`+file_name)
+        axios.get(this.state.host+`/image/annotations/`+this.state.active_image)
           .then(res => {
               let response=res.data;
               let active_faces = response.faces;
@@ -158,7 +158,7 @@ class App extends Component {
             <Col md={"auto"} className={"Image-list"} >
                 <Row>
                 <Container fluid style={{  height:'700px'}}>
-                    { this.state.images.map(image => <Col fluid onClick={()=>{this.imageClick(image)}}><Image fluid width={150} height={150} src={this.state.host+"/thumbs?file_name="+image} thumbnail /></Col>)}
+                    {/*{ this.state.images.map(image => <Col fluid onClick={()=>{this.imageClick(image)}}><Image fluid width={150} height={150} src={this.state.host+"/thumbs?file_name="+image} thumbnail /></Col>)}*/}
                 </Container>
                 </Row>
 
@@ -166,17 +166,15 @@ class App extends Component {
             <Col >
                 <Row>
                     <Col>
-                    <Image center fluid onChange={()=>console.log("hello")} src={!!(this.state.active_image)?this.state.host+"/image?file_name="+this.state.active_image+"&identity="+this.state.identity+"&gender="+this.state.gender+"&age="+this.state.age+"&expressions="+this.state.expressions+"&bbox="+this.state.bbox+"&ann="+this.state.active_ann_list:""} thumbnail />
+                    <Image center fluid onChange={()=>console.log("hello")} src={!!(this.state.active_image)?this.state.host+"/image/"+this.state.active_image+"?show-bbox="+this.state.show_bbox+"&show-name="+this.state.show_name+"&show-score="+this.state.show_score+"&hide-face=[]":""} thumbnail />
                     </Col>
                 </Row>
                 <Row>
                     <Form>
                         <Form.Row>
-                            <Form.Check onClick={()=>this.setState(prevState => ({  identity: !prevState.identity}))} type={"checkbox"} label={`Identity`} />
-                            <Form.Check  onClick={()=>this.setState(prevState => ({  gender: !prevState.gender}))} type={"checkbox"} label={`Gender`} />
-                            <Form.Check  onClick={()=>this.setState(prevState => ({  age: !prevState.age}))} type={"checkbox"} label={`Age`} />
-                            <Form.Check  onClick={()=>this.setState(prevState => ({  expressions: !prevState.expressions}))} type={"checkbox"} label={`Expressions`} />
-                            <Form.Check  onClick={()=>this.setState(prevState => ({  bbox: !prevState.bbox}))} type={"checkbox"} label={`Bounding Box`} />
+                            <Form.Check onClick={()=>this.setState(prevState => ({  show_name: !prevState.show_name}))} type={"checkbox"} label={`Name`} />
+                            <Form.Check  onClick={()=>this.setState(prevState => ({  show_score: !prevState.show_score}))} type={"checkbox"} label={`Confidence`} />
+                            <Form.Check  onClick={()=>this.setState(prevState => ({  show_bbox: !prevState.show_bbox}))} type={"checkbox"} label={`Bounding Box`} />
                         </Form.Row>
                     </Form>
                 </Row>
@@ -189,10 +187,8 @@ class App extends Component {
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>Identity</th>
-                              <th>Gender</th>
-                              <th>Age</th>
-                              <th>Facial Expressions</th>
+                              <th>Name</th>
+                              <th>Confidence Score</th>
                             </tr>
                           </thead>
                           <tbody>

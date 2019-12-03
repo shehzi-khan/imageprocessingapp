@@ -31,16 +31,24 @@ def create():
 
 @app.route("/image/<string:_id>", methods=["GET"])
 def show(_id):
+ show_bbox=request.args.get('show-bbox')
+ show_label=request.args.get('show-name')
+ # show_score=request.args.get('show-score')
+ hide_faces=request.args.get('hide-face')
  image = DataServer().find_image_data(_id)
  bin_image=image["image_bytestream"]
 
  buff = np.frombuffer(bin_image, np.uint8)
  img=cv2.imdecode(buff,cv2.IMREAD_COLOR)
- for face in image["annotation"]:
-     label=face["label"]
-     bbox=face["bbox"]
-     cv2.putText(img, label, (bbox["x"]+10, bbox["y"]+10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
-     cv2.rectangle(img, (bbox["x"], bbox["y"]), (bbox["x"]+bbox["w"], bbox["y"]+bbox["h"]), (255,0,0), thickness=1, lineType=8, shift=0)
+ for index,face in enumerate(image["annotation"]):
+     if str(index) not in hide_faces:
+         label=face["label"]
+         bbox=face["bbox"]
+         print(type(show_label))
+         if show_label == "True":
+            cv2.putText(img, label, (bbox["x"]+10, bbox["y"]+bbox["h"]-20), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,255,0), 2)
+         if show_bbox == "True":
+            cv2.rectangle(img, (bbox["x"], bbox["y"]), (bbox["x"]+bbox["w"], bbox["y"]+bbox["h"]), (255,0,0), thickness=2, lineType=8, shift=0)
  ret, jpeg = cv2.imencode('.jpg', img)
  image["image_bytestream"] = jpeg.tobytes()
 
