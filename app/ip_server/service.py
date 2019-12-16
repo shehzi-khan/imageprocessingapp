@@ -6,8 +6,11 @@ class Service(object):
  def __init__ (self, repo_client=MongoRepository()):
    self.repo_client = repo_client
 
- def find_all_data(self,limit=None,sort=-1):
-   images = self.repo_client.find_all(limit,sort)
+ def find_all_data(self,filter=None,limit=None,sort=-1):
+   images = self.repo_client.find_all(filter,limit,sort)
+   # print(filter)
+   # for image in images:
+   #     print(image)
    return [self.dump(image) for image in images]
 
  def find_image_data(self, image_id):

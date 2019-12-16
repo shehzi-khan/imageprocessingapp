@@ -7,6 +7,10 @@
           <mappings>
             <mapping deploy="/home/vip/Projects/image_processing_server" local="$PROJECT_DIR$" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/app/http/web/app/package.json" />
+            <excludedPath local="true" path="$PROJECT_DIR$/app/http/web/app/node_modules" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
